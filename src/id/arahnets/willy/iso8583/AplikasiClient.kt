@@ -17,10 +17,13 @@ class AplikasiClient {
 
         val client = AplikasiClient()
         val bitmap = client.countBitmap(logonRequest)
+        println("Bitmap : $bitmap")
 
+        //convert bitmap to binary
         val strBitToBin = bitmap.toString(2)
         println("Convert Binary : $strBitToBin")
 
+        //convert bitmap to hexa
         val strBitToHex = bitmap.toString(16)
         println("Convert Hexa : $strBitToHex")
     }
