@@ -1,5 +1,6 @@
 package id.arahnets.willy.iso8583
 
+import java.lang.StringBuilder
 import java.math.BigInteger
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,6 +30,18 @@ class AplikasiClient {
         //convert bitmap to hexa
         val strBitToHexRequest = bitmapRequest.toString(16)
         println("Convert Hexa : $strBitToHexRequest")
+
+        val strLOgonRequest = client.messageString("0800", logonRequest)
+        println("Logon Request : $strLOgonRequest")
+
+        val messageLength = strLOgonRequest.length +2
+        println("Message Length : $messageLength")
+
+        val byteArrayLengt = ByteArray(2)
+        byteArrayLengt[0] = (messageLength shr 8 and 0xff ).toByte()
+        byteArrayLengt[0] = (messageLength and 0xff ).toByte()
+        println("Message Length Byte Order : ${String(byteArrayLengt)}")
+
 
         println("========================= RESPONSE =========================")
 
@@ -64,6 +77,16 @@ class AplikasiClient {
 
         return bitmap
 
+    }
+
+    fun messageString(mti: String, message: MutableMap<Int, String>):String{
+        val hasil = StringBuilder()
+        hasil.append(mti)
+        hasil.append(countBitmap(message).toString(16))
+        for (dataElement in message.keys){
+            hasil.append(message.get(dataElement))
+        }
+        return hasil.toString()
     }
 
 }
